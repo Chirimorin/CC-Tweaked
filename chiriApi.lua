@@ -46,11 +46,11 @@ args = {...}
 if (args[1] ~= nil) then
     -- An argument was given, meaning this was run as a program.
     if (args[1] == "update") then
-        print("Updating ChiriApi...")
+        print("--  Updating chiriApi  --")
         fs.delete("chiriApi.lua")
         downloadFile("chiriApi.lua")
 
-        print("Updating API files")
+        print("--  Updating API files  --")
         if (fs.exists(apiFolder)) then
             local files = fs.list(apiFolder)
             for k, v in pairs(files) do
@@ -58,7 +58,7 @@ if (args[1] ~= nil) then
                 downloadFile(apiFolder .. "/" .. v)
             end
         end
-        print("Update completed!")
+        print("--  Update completed!  --")
     end
 end
 

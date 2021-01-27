@@ -23,7 +23,7 @@ local function centeredText(text, width, cutoff)
 
     if (text == nil) then return nil end
 
-    local spaces = (Width - #text) / 2
+    local spaces = (width - #text) / 2
     return string.rep(" ", math.floor(spaces)) .. text .. string.rep(" ", math.ceil(spaces))
 end
 
