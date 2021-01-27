@@ -49,19 +49,19 @@ local function showMenu(menuItems, x, y, w, h)
 
             local event, key, is_held = os.pullEvent("key")
             if (key == keys.up) then
-                if (selectionIndex == 1) then
-                    selectionIndex = menuSize
+                if (selectedIndex == 1) then
+                    selectedIndex = menuSize
                 else
-                    selectionIndex = selectionIndex - 1
+                    selectedIndex = selectedIndex - 1
                 end
             elseif (key == keys.down) then
-                if (selectionIndex == menuSize) then
-                    selectionIndex = 1
+                if (selectedIndex == menuSize) then
+                    selectedIndex = 1
                 else
-                    selectionIndex = selectionIndex + 1
+                    selectedIndex = selectedIndex + 1
                 end
             elseif (key == keys.enter and not is_held) then
-                return i, menuItems[selectionIndex]
+                return i, menuItems[selectedIndex]
             end
         end
     end
