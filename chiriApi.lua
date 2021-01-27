@@ -11,18 +11,19 @@ local apiFolder = "ChiriApi"
 ---------------------
 --  API FUNCTIONS  --
 ---------------------
-local function require(apiName)
+local function APIrequire(apiName)
     if (not fs.exists(apiFolder .. "/" .. apiName)) then
-        local response, error = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. apiFolder .. "/" .. "apiName" .. ".lua")
+        local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. apiFolder .. "/" .. apiName .. ".lua")
         if (response == nil) then
             -- File does not exist, nothing to load
-            error("ChiriApi \"" .. apiName .. "\" was not found")
+            error(apiFolder .."/" .. apiName .. ".lua could not be downloaded")
+            error("Message: " .. errorMessage)
             return nil
         end
 
         local fileInfo = textutils.unserializeJSON(response.readAll())
         if (fileInfo.type ~= "file") then
-            error("ChiriApi \"" .. apiName .. "\" is not a file")
+            error(apiFolder .."/" .. apiName .. ".lua is not a file")
             return nil
         end
 
@@ -32,4 +33,4 @@ local function require(apiName)
     return require(apiFolder .. "/" .. apiName)
 end
 
-return { require = require }
+return { require = APIrequire }
