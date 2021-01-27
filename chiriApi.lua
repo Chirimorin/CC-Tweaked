@@ -13,22 +13,21 @@ local apiFolder = "ChiriApi"
 ---------------------
 local function require(apiName)
     if (not fs.exists(apiFolder .. "/" .. apiName)) then
-            local response, error = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. apiFolder .. "/" .. "apiName" .. ".lua")
-            if (response == nil) then
-                -- File does not exist, nothing to load
-                error("ChiriApi \"" .. apiName .. "\" was not found")
-                return nil
-            end
-
-            local fileInfo = textutils.unserializeJSON(response.readAll())
-            if (fileInfo.type ~= "file") then
-                error("ChiriApi \"" .. apiName .. "\" is not a file")
-                return nil
-            end
-
-            -- Actually download the file
-            shell.run("wget " .. fileInfo.download_url .. " " .. apiFolder .. "/" .. apiName)
+        local response, error = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. apiFolder .. "/" .. "apiName" .. ".lua")
+        if (response == nil) then
+            -- File does not exist, nothing to load
+            error("ChiriApi \"" .. apiName .. "\" was not found")
+            return nil
         end
+
+        local fileInfo = textutils.unserializeJSON(response.readAll())
+        if (fileInfo.type ~= "file") then
+            error("ChiriApi \"" .. apiName .. "\" is not a file")
+            return nil
+        end
+
+        -- Actually download the file
+        shell.run("wget " .. fileInfo.download_url .. " " .. apiFolder .. "/" .. apiName)
     end
     return require(apiFolder .. "/" .. apiName)
 end
