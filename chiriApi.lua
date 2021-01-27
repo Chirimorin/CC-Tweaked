@@ -39,7 +39,7 @@ local function APIrequire(apiName)
 end
 
 -- Encoding
-function base64Encode(data)
+local function base64Encode(data)
     return ((data:gsub('.', function(x)
         local r,b='',x:byte()
         for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
@@ -53,7 +53,7 @@ function base64Encode(data)
 end
 
 -- Decoding
-function base64Decode(data)
+local function base64Decode(data)
     data = string.gsub(data, '[^'..b..'=]', '')
     return (data:gsub('.', function(x)
         if (x == '=') then return '' end
