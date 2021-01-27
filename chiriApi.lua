@@ -52,7 +52,7 @@ if (args[1] ~= nil) then
 
         print("Updating API files")
         if (fs.exists(apiFolder)) then
-            local files = list(apiFolder)
+            local files = fs.list(apiFolder)
             for k, v in pairs(files) do
                 fs.delete(apiFolder .. "/" .. v)
                 downloadFile(apiFolder .. "/" .. v)
