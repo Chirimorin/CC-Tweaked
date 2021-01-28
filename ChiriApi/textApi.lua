@@ -32,6 +32,18 @@ local function centeredText(text, width, cutoff)
     return string.rep(" ", math.floor(spaces)) .. text .. string.rep(" ", math.ceil(spaces))
 end
 
+function formatNumber(number)
+    if (number > 1000000000) then
+        return math.floor((number/1000000) + 0.5) / 1000 .. " B"
+    if (number > 1000000) then
+        return math.floor((number/1000) + 0.5) / 1000 .. " M"
+    elseif (number > 1000) then
+        return math.floor(number + 0.5) / 1000 .. " K"
+    else
+        return math.floor(number + 0.5) .. " "
+    end
+end
+
 local function writeCenteredText(text, x, y, width, cutoff)
     expect(1, text, "string")
     expect(2, width, "number")
@@ -46,5 +58,6 @@ end
 return {
     clipText = clipText,
     centeredText = centeredText,
+    formatNumber = formatNumber,
     writeCenteredText = writeCenteredText
 }
