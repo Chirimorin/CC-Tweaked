@@ -33,35 +33,49 @@ local function showMenu(menuItems, x, y, w, h)
     h = math.max(1, math.min(tH-y, h))
 
     local selectedIndex = 1 -- This is Lua, arrays start at 1
+    local scrollPosition = 1
     local menuSize = 0
     for _ in pairs(menuItems) do menuSize = menuSize + 1 end
 
-    if (menuSize > h) then
-        write("scrolling menus not supported yet...")
-    else
-        while true do
-            -- draw the menu
-            for i = 1, menuSize, 1 do
-                term.setCursorPos(x, y + i - 1)
+    while true do
+        -- draw the menu
+        for i = scrollPosition, math.min(h + scrollPosition - 1, menuSize), 1 do
+            term.setCursorPos(x, y + i - scrollPosition)
+            if (i == scrollPosition and i ~= 1) then
+                -- First position becomes an arrow when items are hidden above it
+                writeMenuItem("^", w, false)
+            elseif (i == h + scrollPosition - 1 and i ~= menuSize)
+                -- Last position becomes an arrow when items are hidden below it
+                writeMenuItem("V", w, false)
+            else
+                -- This is a normal menu item
                 writeMenuItem(menuItems[i], w, i == selectedIndex)
             end
+        end
 
-            local event, key, is_held = os.pullEvent("key")
-            if (key == keys.up) then
-                if (selectedIndex == 1) then
-                    selectedIndex = menuSize
-                else
-                    selectedIndex = selectedIndex - 1
+        local event, key, is_held = os.pullEvent("key")
+        if (key == keys.up) then
+            if (selectedIndex == 1) then
+                selectedIndex = menuSize
+                scrollPosition = menuSize - h + 1
+            else
+                selectedIndex = selectedIndex - 1
+                if (scrollPosition == selectedIndex and scrollPosition ~= 1) then
+                    scrollPosition = scrollPosition - 1
                 end
-            elseif (key == keys.down) then
-                if (selectedIndex == menuSize) then
-                    selectedIndex = 1
-                else
-                    selectedIndex = selectedIndex + 1
-                end
-            elseif (key == keys.enter and not is_held) then
-                return menuItems[selectedIndex], i
             end
+        elseif (key == keys.down) then
+            if (selectedIndex == menuSize) then
+                selectedIndex = 1
+                scrollPosition = 1
+            else
+                selectedIndex = selectedIndex + 1
+                if (scrollPosition == selectedIndex and scrollPosition ~= h)
+                    scrollPosition = scrollPosition + 1
+                end
+            end
+        elseif (key == keys.enter and not is_held) then
+            return menuItems[selectedIndex], i
         end
     end
 end
