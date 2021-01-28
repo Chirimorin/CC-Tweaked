@@ -40,7 +40,7 @@ local function writeCenteredText(text, x, y, width, cutoff)
     expect(5, cutoff, "string", "nil")
 
     term.setCursorPos(x, y)
-    term.write(text = centeredText(text, width, cutoff))
+    term.write(centeredText(text, width, cutoff))
 end
 
 return {
