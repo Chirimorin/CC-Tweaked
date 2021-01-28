@@ -28,7 +28,6 @@ local function showMenu(menuItems, x, y, w, h)
     h = h or tH
 
     -- Make sure this will fit on the screen
-
     w = math.max(6, math.min(tW-x+1, w))
     h = math.max(1, math.min(tH-y+1, h))
 
@@ -38,14 +37,14 @@ local function showMenu(menuItems, x, y, w, h)
     for _ in pairs(menuItems) do menuSize = menuSize + 1 end
 
     while true do
-        -- draw the menu
+        -- Draw the menu
         for i = scrollPosition, math.min(h + scrollPosition - 1, menuSize), 1 do
             term.setCursorPos(x, y + i - scrollPosition)
             if (i == scrollPosition and i ~= 1) then
-                -- First position becomes an arrow when items are hidden above it
+                -- This is the top position, but not the first menuItem, hide it with an arrow.
                 writeMenuItem("^", w, false)
             elseif (i == h + scrollPosition - 1 and i ~= menuSize) then
-                -- Last position becomes an arrow when items are hidden below it
+                -- This is the bottom position, but not the last menuItem, hide it with an arrow.
                 writeMenuItem("V", w, false)
             else
                 -- This is a normal menu item
@@ -53,14 +52,17 @@ local function showMenu(menuItems, x, y, w, h)
             end
         end
 
+        -- Wait for a keypress
         local event, key, is_held = os.pullEvent("key")
         if (key == keys.up) then
             if (selectedIndex == 1) then
                 if (not is_held) then
+                    -- Wrap to the bottom
                     selectedIndex = menuSize
                     scrollPosition = math.max(menuSize - h + 1, 1)
                 end
             else
+                -- Select the previous item, scroll if needed
                 selectedIndex = selectedIndex - 1
                 if (scrollPosition == selectedIndex and scrollPosition ~= 1) then
                     scrollPosition = scrollPosition - 1
@@ -69,10 +71,12 @@ local function showMenu(menuItems, x, y, w, h)
         elseif (key == keys.down) then
             if (selectedIndex == menuSize) then
                 if (not is_held) then
+                    -- Wrap to the top
                     selectedIndex = 1
                     scrollPosition = 1
                 end
             else
+                -- Select the next item, scroll if needed
                 selectedIndex = selectedIndex + 1
                 if (scrollPosition + h - 1 == selectedIndex and scrollPosition ~= menuSize - h + 1) then
                     scrollPosition = scrollPosition + 1
