@@ -60,7 +60,7 @@ local function showMenu(menuItems, x, y, w, h)
                     selectedIndex = selectedIndex + 1
                 end
             elseif (key == keys.enter and not is_held) then
-                return i, menuItems[selectedIndex]
+                return menuItems[selectedIndex], i
             end
         end
     end

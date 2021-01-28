@@ -27,6 +27,7 @@ function findPeripheral(name, description)
     term.write(textApi.centeredText(description, x))
     local selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, x - 2, y - 2)
     term.clear()
+    term.setCursorPos(1, 1)
 
     settings.set(name, selectedPeripheral)
     settings.save(".savedPeripherals")
