@@ -28,9 +28,9 @@ function findPeripheral(name, description)
     local selectedPeripheral = ""
     if (description ~= nil) then
         textApi.writeCenteredText(description, 1, 2, w)
-        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, w - 2, h - 2)
+        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 4, w - 2, h - 3)
     else
-        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 2, w - 2, h - 1)
+        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, w - 2, h - 2)
     end
     term.clear()
     term.setCursorPos(1, 1)
