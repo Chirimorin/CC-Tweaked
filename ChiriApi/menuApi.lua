@@ -57,7 +57,7 @@ local function showMenu(menuItems, x, y, w, h)
         if (key == keys.up) then
             if (selectedIndex == 1) then
                 selectedIndex = menuSize
-                scrollPosition = menuSize - h + 1
+                scrollPosition = math.max(menuSize - h + 1, 1)
             else
                 selectedIndex = selectedIndex - 1
                 if (scrollPosition == selectedIndex and scrollPosition ~= 1) then
@@ -70,7 +70,7 @@ local function showMenu(menuItems, x, y, w, h)
                 scrollPosition = 1
             else
                 selectedIndex = selectedIndex + 1
-                if (scrollPosition == selectedIndex and scrollPosition ~= h) then
+                if (scrollPosition + h - 1 == selectedIndex and scrollPosition ~= menuSize - h + 1) then
                     scrollPosition = scrollPosition + 1
                 end
             end
