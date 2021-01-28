@@ -1,11 +1,16 @@
 -- No more manually entering peripheral names, prompt the user with a list of current peripherals instead!
 -- Values are saved so the computer can be restarted without having to enter the peripherals again
 
+local expect = (require "cc.expect").expect
+
 local chiriApi = require("chiriApi")
 local menuApi = chiriApi.require("menuApi")
 local textApi = chiriApi.require("textApi")
 
 function findPeripheral(name, description)
+    expect(1, name, "string")
+    expect(2, description, "string", "nil")
+
     -- Switch to our own settings file
     settings.save()
     settings.load(".savedPeripherals")
@@ -22,8 +27,13 @@ function findPeripheral(name, description)
     local w, h = term.getSize()
     term.clear()
     textApi.writeCenteredText("Please select \"" .. name .. "\"", 1, 1, w)
-    textApi.writeCenteredText(description, 1, 2, w)
-    local selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, w - 2, h - 2)
+    local selectedPeripheral = ""
+    if (description != nil) then
+        textApi.writeCenteredText(description, 1, 2, w)
+        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, w - 2, h - 2)
+    else
+        selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 2, w - 2, h - 1)
+    end
     term.clear()
     term.setCursorPos(1, 1)
 
