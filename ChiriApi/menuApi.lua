@@ -15,10 +15,7 @@ end
 -- Blocks while waiting for user input
 -- Returns the chosen item
 local function showMenu(menuItems, x, y, w, h)
-    if (type(menuItems) ~= "table") then
-        error("Expected menuItems to be a table, got " .. type(menuItems) .. " instead.")
-        return nil
-    end
+    expect(1, menuItems, "table")
 
     tW, tH = term.getSize()
 
