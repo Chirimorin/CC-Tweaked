@@ -29,8 +29,8 @@ local function showMenu(menuItems, x, y, w, h)
 
     -- Make sure this will fit on the screen
 
-    w = math.max(6, math.min(tW-x, w))
-    h = math.max(1, math.min(tH-y, h))
+    w = math.max(6, math.min(tW-x+1, w))
+    h = math.max(1, math.min(tH-y+1, h))
 
     local selectedIndex = 1 -- This is Lua, arrays start at 1
     local scrollPosition = 1
