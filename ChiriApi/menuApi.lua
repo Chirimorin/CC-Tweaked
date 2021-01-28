@@ -1,5 +1,7 @@
 -- This contains functions to easily create simple menus
 
+local expect = (require "cc.expect").expect
+
 local chiriApi = require("chiriApi")
 local textApi = chiriApi.require("textApi")
 
