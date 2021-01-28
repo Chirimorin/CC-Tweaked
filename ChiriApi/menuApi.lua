@@ -44,7 +44,7 @@ local function showMenu(menuItems, x, y, w, h)
             if (i == scrollPosition and i ~= 1) then
                 -- First position becomes an arrow when items are hidden above it
                 writeMenuItem("^", w, false)
-            elseif (i == h + scrollPosition - 1 and i ~= menuSize)
+            elseif (i == h + scrollPosition - 1 and i ~= menuSize) then
                 -- Last position becomes an arrow when items are hidden below it
                 writeMenuItem("V", w, false)
             else
@@ -70,7 +70,7 @@ local function showMenu(menuItems, x, y, w, h)
                 scrollPosition = 1
             else
                 selectedIndex = selectedIndex + 1
-                if (scrollPosition == selectedIndex and scrollPosition ~= h)
+                if (scrollPosition == selectedIndex and scrollPosition ~= h) then
                     scrollPosition = scrollPosition + 1
                 end
             end
