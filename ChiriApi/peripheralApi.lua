@@ -19,13 +19,11 @@ function findPeripheral(name, description)
     -- Peripheral not found, define the setting and create a menu for the user to select it
     settings.define(name, {description = description, type = "string"})
 
-    local x, y = term.getSize()
+    local w, h = term.getSize()
     term.clear()
-    term.setCursorPos(1, 1)
-    term.write(textApi.centeredText("Please select the peripheral for " .. name, x))
-    term.setCursorPos(1, 2)
-    term.write(textApi.centeredText(description, x))
-    local selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, x - 2, y - 2)
+    textApi.writeCenteredText("Please select \"" .. name .. "\"", 1, 1, w))
+    textApi.writeCenteredText(description, 1, 2, w))
+    local selectedPeripheral = menuApi.showMenu(peripheral.getNames(), 2, 3, w - 2, h - 2)
     term.clear()
     term.setCursorPos(1, 1)
 

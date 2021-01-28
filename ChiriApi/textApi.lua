@@ -32,7 +32,19 @@ local function centeredText(text, width, cutoff)
     return string.rep(" ", math.floor(spaces)) .. text .. string.rep(" ", math.ceil(spaces))
 end
 
+local function writeCenteredText(text, x, y, width, cutoff)
+    expect(1, text, "string")
+    expect(2, width, "number")
+    expect(3, x, "number")
+    expect(4, y, "number")
+    expect(5, cutoff, "string", "nil")
+
+    term.setCursorPos(x, y)
+    term.write(text = centeredText(text, width, cutoff))
+end
+
 return {
     clipText = clipText,
-    centeredText = centeredText
+    centeredText = centeredText,
+    writeCenteredText = writeCenteredText
 }
