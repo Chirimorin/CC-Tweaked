@@ -33,8 +33,8 @@ local function showMenu(menuItems, x, y, w, h)
     h = math.max(1, math.min(tH-y+1, h))
 
     local selectedIndex = 1 -- This is Lua, arrays start at 1
-    local scrollPosition = 1
-    local menuSize = 0
+    local scrollPosition = 1 -- The index of the top displayed row
+    local menuSize = 0 -- The total amount of options in this menu
     for _ in pairs(menuItems) do menuSize = menuSize + 1 end
 
     while true do
