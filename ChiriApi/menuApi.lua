@@ -56,8 +56,10 @@ local function showMenu(menuItems, x, y, w, h)
         local event, key, is_held = os.pullEvent("key")
         if (key == keys.up) then
             if (selectedIndex == 1) then
-                selectedIndex = menuSize
-                scrollPosition = math.max(menuSize - h + 1, 1)
+                if (not is_held) then
+                    selectedIndex = menuSize
+                    scrollPosition = math.max(menuSize - h + 1, 1)
+                end
             else
                 selectedIndex = selectedIndex - 1
                 if (scrollPosition == selectedIndex and scrollPosition ~= 1) then
@@ -66,8 +68,10 @@ local function showMenu(menuItems, x, y, w, h)
             end
         elseif (key == keys.down) then
             if (selectedIndex == menuSize) then
-                selectedIndex = 1
-                scrollPosition = 1
+                if (not is_held) then
+                    selectedIndex = 1
+                    scrollPosition = 1
+                end
             else
                 selectedIndex = selectedIndex + 1
                 if (scrollPosition + h - 1 == selectedIndex and scrollPosition ~= menuSize - h + 1) then
