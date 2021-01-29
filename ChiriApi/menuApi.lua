@@ -83,6 +83,13 @@ local function showMenu(menuItems, x, y, w, h)
                 end
             end
         elseif (key == keys.enter and not is_held) then
+            -- Clear the menu area
+            for i = y, y+h, 1 do
+                term.setCursorPos(i, x)
+                term.write(string.rep(" ", w))
+            end
+
+            -- Return the selected item
             return menuItems[selectedIndex], selectedIndex
         end
     end
