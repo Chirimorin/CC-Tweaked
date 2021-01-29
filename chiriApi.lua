@@ -14,25 +14,26 @@ local apiFolder = "ChiriApi"
 local function downloadFile(filePath)
     local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. filePath)
     if (response == nil) then
-        -- File does not exist, nothing to load
-        error(filePath .. " could not be downloaded")
-        error("Message: " .. errorMessage)
-        return nil
+        return errorMessage
     end
 
     local fileInfo = textutils.unserializeJSON(response.readAll())
     if (fileInfo.type ~= "file") then
-        error(filePath .. " is not a file")
-        return nil
-    end
-
-    -- Delete the old file before downloading
-    if (fs.exists(filePath)) then
-        fs.delete(filePath)
+        return "\"" .. filePath .. "\" is not a file"
     end
 
     -- Actually download the file
-    shell.run("wget " .. fileInfo.download_url .. " " .. filePath)
+    response, errorMessage = http.get(fileInfo.download_url)
+    if (response == nil) then
+        return errorMessage
+    end
+
+    local fileData = response.readAll()
+    local file = fs.open(filePath, "w")
+    file.write(fileData)
+    file.close()
+
+    --shell.run("wget " .. fileInfo.download_url .. " " .. filePath)
 end
 
 local function requireApi(apiName)
