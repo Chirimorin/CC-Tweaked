@@ -43,6 +43,8 @@ end
 --  PROGRAM FUNCTIONS  --
 -------------------------
 local function update()
+    local textApi = requireApi("textApi")
+
     local w, h = term.getSize()
     term.clear()
     term.setCursorPos(1,1)
@@ -51,7 +53,7 @@ local function update()
     fs.delete("chiriApi.lua")
     downloadFile("chiriApi.lua")
 
-    print(textApi.centeredText("--  Updating API files  --", w)
+    print(textApi.centeredText("--  Updating API files  --", w))
     if (fs.exists(apiFolder)) then
         local files = fs.list(apiFolder)
         for k, v in pairs(files) do
@@ -59,10 +61,12 @@ local function update()
             downloadFile(apiFolder .. "/" .. v)
         end
     end
-    print(textApi.centeredText("--  Update completed!  --", w)
+    print(textApi.centeredText("--  Update completed!  --", w))
 end
 
 local function install(programName)
+    local textApi = requireApi("textApi")
+
     local w, h = term.getSize()
     term.clear()
     term.setCursorPos(1,1)
@@ -84,8 +88,8 @@ local function install(programName)
         local availablePrograms = {}
 
         -- Find all files that end in .lua, exclude this file
-        for file in files do
-            if (file.type == "file" && string.sub(file.name, -4) == ".lua" && file.name != "chiriApi.lua") then
+        for _, file in pairs(files) do
+            if (file.type == "file" and string.sub(file.name, -4) == ".lua" and file.name ~= "chiriApi.lua") then
                 table.insert(availablePrograms, file.name)
             end
         end
@@ -109,15 +113,13 @@ local function install(programName)
         programName = programName .. ".lua"
     end
 
-    print(textApi.centeredText("Downloading program \"" .. programName .. "\""))
+    print(textApi.centeredText("Downloading program \"" .. programName .. "\"", w))
     downloadFile(programName)
 end
 
 args = {...}
 if (args[1] ~= nil) then
     -- An argument was given, meaning this was run as a program.
-    local textApi = requireApi("textApi")
-
     if (args[1] == "update") then
         update()
     end
