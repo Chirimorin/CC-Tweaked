@@ -8,6 +8,11 @@ local menuApi = chiriApi.require("menuApi")
 local textApi = chiriApi.require("textApi")
 
 function findPeripheral(name, description)
+    peripheralNames = peripheral.getNames()
+    if next(peripheral.getNames() == nil)
+        error("No peripherals found")
+    end
+
     expect(1, name, "string")
     expect(2, description, "string", "nil")
 
