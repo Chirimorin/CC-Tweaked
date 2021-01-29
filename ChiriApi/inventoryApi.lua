@@ -14,6 +14,8 @@ local function findItemByFilter(inventory, filter)
             return i, item
         end
     end
+
+    return nil
 end
 
 -- Checks the inventory for items matching the filter function
