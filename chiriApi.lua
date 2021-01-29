@@ -74,7 +74,7 @@ local function update()
     print(textApi.centeredText("--  Updating Programs  --", w))
     local files = fs.list("")
     for k, v in pairs(files) do
-        if (string.sub(v, -4) == ".lua" and v ~= "chiriApi.lua") then
+        if (string.sub(v, -4) == ".lua" and v ~= "chiriApi.lua" and v ~= "startup.lua") then
             downloadFileWithMessages(v)
         end
     end
@@ -115,12 +115,8 @@ local function install(programName)
         table.insert(availablePrograms, "Cancel")
 
         -- Show a menu with the available programs
-        print(textApi.centeredText("Please choose a program to install", w))
-        programName = requireApi("menuApi").showMenu(availablePrograms, 1, 2)
-
-        -- Clear the terminal
-        term.clear()
-        term.setCursorPos(1,1)
+        print(textApi.centeredText("Choose a program to install", w))
+        programName = menuApi.showMenu(availablePrograms, 1, 2)
 
         -- Check if the user selected cancel
         if (programName == "Cancel") then return end
@@ -133,9 +129,9 @@ local function install(programName)
     print(textApi.centeredText("Downloading program \"" .. programName .. "\"", w))
     if (downloadFileWithMessages(programName) == nil) then
         print(textApi.centeredText("Autostart " .. programName .. "?", w))
+        termX, termY = term.getCursorPos()
         local x = math.floor((w-5)/2)
-        if (menuApi.showMenu({"Yes", "No"}, x, 4, 5, 2) == "Yes") then
-            term.setCursorPos(1, 4)
+        if (menuApi.showMenu({"Yes", "No"}, x, termY, 5, 2) == "Yes") then
             print(textApi.centeredText("Creating startup.lua...", w))
 
             local file = fs.open("startup.lua", "w")
