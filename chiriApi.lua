@@ -12,18 +12,7 @@ local apiFolder = "ChiriApi"
 --  API FUNCTIONS  --
 ---------------------
 local function downloadFile(filePath)
-    local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/" .. filePath)
-    if (response == nil) then
-        return errorMessage
-    end
-
-    local fileInfo = textutils.unserializeJSON(response.readAll())
-    if (fileInfo.type ~= "file") then
-        return "\"" .. filePath .. "\" is not a file"
-    end
-
-    -- Actually download the file
-    response, errorMessage = http.get(fileInfo.download_url)
+    local response, errorMessage = http.get("https://raw.githubusercontent.com/" .. githubUser .. "/" .. repoName .. "/main/" .. filePath)
     if (response == nil) then
         return errorMessage
     end
@@ -47,6 +36,7 @@ end
 --  PROGRAM FUNCTIONS  --
 -------------------------
 local function downloadFileWithMessages(filePath)
+    local textApi = requireApi("textApi")
     local w, h = term.getSize()
     local errorMessage = downloadFile(filePath)
     if (errorMessage == nil) then
@@ -97,7 +87,7 @@ local function install(programName)
     -- Check if a program name was given, display a list of options otherwise
     if (programName == nil) then
         -- Get a list of files in the github repo root
-        local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/")
+        local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/git/trees/main")
         if (response == nil) then
             -- File does not exist, nothing to load
             error("Could not load list of programs")
@@ -110,7 +100,7 @@ local function install(programName)
 
         -- Find all files that end in .lua, exclude this file
         for _, file in pairs(files) do
-            if (file.type == "file" and string.sub(file.name, -4) == ".lua" and file.name ~= "chiriApi.lua") then
+            if (string.sub(file.path, -4) == ".lua" and file.path ~= "chiriApi.lua") then
                 table.insert(availablePrograms, file.name)
             end
         end
