@@ -37,6 +37,7 @@ local function showMenu(menuItems, x, y, w, h)
     for _ in pairs(menuItems) do menuSize = menuSize + 1 end
 
     while true do
+        local oldX, oldY = term.getCursorPos()
         -- Draw the menu
         for i = scrollPosition, math.min(h + scrollPosition - 1, menuSize), 1 do
             term.setCursorPos(x, y + i - scrollPosition)
@@ -51,6 +52,7 @@ local function showMenu(menuItems, x, y, w, h)
                 writeMenuItem(menuItems[i], w, i == selectedIndex)
             end
         end
+        term.setCursorPos(oldX, oldY)
 
         -- Wait for a keypress
         local event, key, is_held = os.pullEvent("key")
@@ -84,10 +86,12 @@ local function showMenu(menuItems, x, y, w, h)
             end
         elseif (key == keys.enter and not is_held) then
             -- Clear the menu area
+            oldX, oldY = term.getCursorPos()
             for i = y, y+h, 1 do
-                term.setCursorPos(i, x)
+                term.setCursorPos(x, i)
                 term.write(string.rep(" ", w))
             end
+            term.setCursorPos(oldX, oldY)
 
             -- Return the selected item
             return menuItems[selectedIndex], selectedIndex
