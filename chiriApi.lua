@@ -101,7 +101,7 @@ local function install(programName)
             return
         end
 
-        local files = textutils.unserializeJSON(response.readAll())
+        local files = textutils.unserializeJSON(response.readAll()).tree
         local availablePrograms = {}
 
         -- Find all files that end in .lua, exclude this file
