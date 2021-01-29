@@ -9,7 +9,7 @@ local textApi = chiriApi.require("textApi")
 
 function findPeripheral(name, description)
     peripheralNames = peripheral.getNames()
-    if next(peripheral.getNames() == nil) then
+    if next(peripheral.getNames()) == nil then
         error("No peripherals found")
     end
 
