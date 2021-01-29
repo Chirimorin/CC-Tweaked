@@ -158,9 +158,7 @@ local function completionFunction(shell, parNumber, curText, lastText)
     end
 end
 
-shell.setCompletionFunction("chiriApi", function(shell, index, argument, previous)
-
-end)
+shell.setCompletionFunction("chiriApi", completionFunction)
 
 args = {...}
 if (args[1] ~= nil) then
