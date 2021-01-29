@@ -2,77 +2,80 @@
 
 local expect = (require "cc.expect").expect
 
--- Checks the inventory for items with the given name
--- Returns the slot the item was found in or nil if no items match the given name
+-- Checks the inventory for items matching the filter function
+-- Returns the first slot the item was found in or nil if no items match the given tag
+local function findItemByFilter(inventory, filter)
+    expect(1, inventory, "table")
+    expect(2, filter, "function")
+
+    for i = 1, inventory.size(), 1 do
+        local item = inventory.getItemDetail(i)
+        if (item ~= nil && filter(item)) then
+            return i, item
+        end
+    end
+end
+
+-- Checks the inventory for items matching the filter function
+-- Returns a table with the matching items (with the slots as the key)
+local function findItemsByFilter(inventory, filter)
+    expect(1, inventory, "table")
+    expect(2, filter, "function")
+
+    result = {}
+
+    for i = 1, inventory.size(), 1 do
+        local item = inventory.getItemDetail(i)
+        if (item ~= nil && filter(item)) then
+            result[i] = item
+        end
+    end
+
+    return result
+end
+
+-- Shorthand filter for finding an item by name
 local function findItemByName(inventory, itemName)
     expect(1, inventory, "table")
     expect(2, name, "string")
 
-    for i = 1, inventory.size(), 1 do
-        local item = inventory.getItemDetail(i)
-        if (item ~= nil and item.name == itemName) then
-            return i
-        end
-    end
-
-    return nil
+    return findItemByFilter(inventory, function(item) return item.name == itemName end)
 end
 
--- Checks the inventory for items with the given name
--- Returns a table with the matching items (with the slots as the key)
+-- Shorthand filter for finding items by name
 local function findItemsByName(inventory, itemName)
     expect(1, inventory, "table")
     expect(2, name, "string")
 
-    result = {}
-
-    for i = 1, inventory.size(), 1 do
-        local item = inventory.getItemDetail(i)
-        if (item ~= nil and item.name == itemName) then
-            result[i] = item
-        end
-    end
-
-    return result
+    return findItemsByFilter(inventory, function(item) return item.name == itemName end)
 end
 
--- Checks the inventory for items with the given tag
--- Returns the slot the item was found in or nil if no items match the given tag
+-- Shorthand filter for finding an item by tag
 local function findItemByTag(inventory, itemTag)
     expect(1, inventory, "table")
     expect(2, itemTag, "string")
 
-    for i = 1, inventory.size(), 1 do
-        local item = inventory.getItemDetail(i)
-        if (item ~= nil and item.tags ~= nil and item.tags[itemTag] == true) then
-            return i
-        end
-    end
-
-    return nil
+    return findItemByFilter(inventory, function(item)
+        return item.tags ~= nil and item.tags(itemTag) == true
+    end)
 end
 
--- Checks the inventory for items with the given tag
--- Returns a table with the matching items (with the slots as the key)
+-- Shorthand filter for finding items by tag
 local function findItemsByTag(inventory, itemTag)
     expect(1, inventory, "table")
     expect(2, itemTag, "string")
 
-    result = {}
-
-    for i = 1, inventory.size(), 1 do
-        local item = inventory.getItemDetail(i)
-        if (item ~= nil and item.tags ~= nil and item.tags[itemTag] == true) then
-            result[i] = item
-        end
-    end
-
-    return result
+    return findItemsByFilter(inventory, function(item)
+        return item.tags ~= nil and item.tags(itemTag) == true
+    end)
 end
 
 return {
+    findItemByFilter = findItemByFilter,
+    findItemsByFilter = findItemsByFilter,
     findItemByName = findItemByName,
     findItemsByName = findItemsByName,
     findItemByTag = findItemByTag,
     findItemsByTag = findItemsByTag
+
 }
