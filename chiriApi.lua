@@ -107,7 +107,7 @@ local function install(programName)
         -- Find all files that end in .lua, exclude this file
         for _, file in pairs(files) do
             if (string.sub(file.path, -4) == ".lua" and file.path ~= "chiriApi.lua") then
-                table.insert(availablePrograms, file.name)
+                table.insert(availablePrograms, file.path)
             end
         end
 
