@@ -141,6 +141,22 @@ local function install(programName)
     end
 end
 
+setCompletionFunction("chiriApi", function(shell, index, argument, previous)
+    if (index == 1) then
+        local completionOptions = { "update", "install" }
+
+        local tResults = {}
+        for n=1,#completionOptions do
+            local sOption = completionOptions[n]
+            if #sOption > #argument and string.sub( sOption, 1, #argument ) == sText then
+                local sResult = string.sub( sOption, #argument + 1 )
+                table.insert( tResults, sResult )
+            end
+        end
+        return tResults
+    end
+end)
+
 args = {...}
 if (args[1] ~= nil) then
     -- An argument was given, meaning this was run as a program.
