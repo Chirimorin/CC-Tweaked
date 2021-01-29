@@ -26,6 +26,11 @@ local function downloadFile(filePath)
         return nil
     end
 
+    -- Delete the old file before downloading
+    if (fs.exists(filePath)) then
+        fs.delete(filePath)
+    end
+
     -- Actually download the file
     shell.run("wget " .. fileInfo.download_url .. " " .. filePath)
 end
@@ -50,22 +55,30 @@ local function update()
     term.setCursorPos(1,1)
 
     print(textApi.centeredText("--  Updating chiriApi  --", w))
-    fs.delete("chiriApi.lua")
     downloadFile("chiriApi.lua")
 
     print(textApi.centeredText("--  Updating API files  --", w))
     if (fs.exists(apiFolder)) then
         local files = fs.list(apiFolder)
         for k, v in pairs(files) do
-            fs.delete(apiFolder .. "/" .. v)
             downloadFile(apiFolder .. "/" .. v)
         end
     end
+
+    print(textApi.centeredText("--  Updating Programs  --", w))
+    local files = fs.list("")
+    for k, v in pairs(files) do
+        if (string.sub(v, -4) == ".lua" and v ~= "chiriApi.lua") then
+            downloadFile(v)
+        end
+    end
+
     print(textApi.centeredText("--  Update completed!  --", w))
 end
 
 local function install(programName)
     local textApi = requireApi("textApi")
+    local menuApi = requireApi("menuApi")
 
     local w, h = term.getSize()
     term.clear()
@@ -73,8 +86,6 @@ local function install(programName)
 
     -- Check if a program name was given, display a list of options otherwise
     if (programName == nil) then
-        local menuApi = requireApi("menuApi")
-
         -- Get a list of files in the github repo root
         local response, errorMessage = http.get("https://api.github.com/repos/" .. githubUser .. "/" .. repoName .. "/contents/")
         if (response == nil) then
