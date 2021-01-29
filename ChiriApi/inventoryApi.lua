@@ -10,7 +10,7 @@ local function findItemByFilter(inventory, filter)
 
     for i = 1, inventory.size(), 1 do
         local item = inventory.getItemDetail(i)
-        if (item ~= nil && filter(item)) then
+        if (item ~= nil and filter(item)) then
             return i, item
         end
     end
@@ -28,7 +28,7 @@ local function findItemsByFilter(inventory, filter)
 
     for i = 1, inventory.size(), 1 do
         local item = inventory.getItemDetail(i)
-        if (item ~= nil && filter(item)) then
+        if (item ~= nil and filter(item)) then
             result[i] = item
         end
     end
