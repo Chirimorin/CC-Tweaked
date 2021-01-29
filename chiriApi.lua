@@ -138,9 +138,9 @@ local function install(programName)
             term.setCursorPos(1, 4)
             print(textApi.centeredText("Creating startup.lua...", w))
 
-            fs.open("startup.lua", "w")
-            fs.write("shell.run(\"" .. programName .. "\")")
-            fs.close()
+            local file = fs.open("startup.lua", "w")
+            file.write("shell.run(\"" .. programName .. "\")")
+            file.close()
         end
     end
 end
