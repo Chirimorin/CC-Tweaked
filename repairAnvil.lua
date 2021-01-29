@@ -21,12 +21,26 @@ while true do
         anvil.pushItems(peripheral.getName(outputChest), 1)
     end
 
-    if (anvil.getItemDetail(1) == nil) then
-        local slot = inventoryApi.findItemByFilter(inputChest, needsRepair)
+    -- Default sleep time for when the anvil is idle.
+    -- If the anvil is not idle, sleep time is calculated based on the damage of the item
+    local sleepTime = 10
+
+    -- Move an item needing repair to the anvil if a slot is free
+    local anvilItem = anvil.getItemDetail(1)
+    if (anvilItem == nil) then
+        local slot, item = inventoryApi.findItemByFilter(inputChest, needsRepair)
         if (slot ~= nil)
             inputChest.pushItems(peripheral.getName(anvil), slot)
+            -- The diamond powered anvil repairs 1 damage per tick
+            -- Add 5 ticks of slack to give items a chance to move around
+            sleepTime = (item.damage * 0.05) + 0.25
         end
+    else
+        -- Apparently we underestimated the repair time
+        -- This shouldn't happen if the sleep time calculation above is correct, but we'll take a few extra ticks here
+        print("Anvil is still repairing an item, " .. anvilItem.damage .. " damage left")
+        sleepTime = (anvilItem.damage * 0.05) + 0.50
     end
 
-    sleep(1)
+    sleep(sleepTime)
 end
