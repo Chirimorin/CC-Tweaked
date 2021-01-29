@@ -50,6 +50,7 @@ local function downloadFileWithMessages(filePath)
     end
 
     term.setTextColor(textColor)
+    return errorMessage
 end
 
 local function update()
@@ -130,7 +131,18 @@ local function install(programName)
     end
 
     print(textApi.centeredText("Downloading program \"" .. programName .. "\"", w))
-    downloadFileWithMessages(programName)
+    if (downloadFileWithMessages(programName) == nil) then
+        print(textApi.centeredText("Autostart " .. programName .. "?", w))
+        local x = math.floor((w-5)/2)
+        if (menuApi.showMenu({"Yes", "No"}, x, 4, 5, 2) == "Yes") then
+            term.setCursorPos(1, 4)
+            print(textApi.centeredText("Creating startup.lua...", w))
+
+            fs.open("startup.lua", "w")
+            fs.write("shell.run(\"" .. programName .. "\")")
+            fs.close()
+        end
+    end
 end
 
 args = {...}
