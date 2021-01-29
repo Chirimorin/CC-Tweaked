@@ -22,7 +22,7 @@ local function findItemsByFilter(inventory, filter)
     expect(1, inventory, "table")
     expect(2, filter, "function")
 
-    result = {}
+    local result = {}
 
     for i = 1, inventory.size(), 1 do
         local item = inventory.getItemDetail(i)
@@ -77,5 +77,4 @@ return {
     findItemsByName = findItemsByName,
     findItemByTag = findItemByTag,
     findItemsByTag = findItemsByTag
-
 }
