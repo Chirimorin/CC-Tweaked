@@ -29,7 +29,7 @@ while true do
     local anvilItem = anvil.getItemDetail(1)
     if (anvilItem == nil) then
         local slot, item = inventoryApi.findItemByFilter(inputChest, needsRepair)
-        if (slot ~= nil)
+        if (slot ~= nil) then
             inputChest.pushItems(peripheral.getName(anvil), slot)
             -- The diamond powered anvil repairs 1 damage per tick
             -- Add 5 ticks of slack to give items a chance to move around
