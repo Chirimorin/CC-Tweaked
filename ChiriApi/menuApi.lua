@@ -36,6 +36,10 @@ local function showMenu(menuItems, x, y, w, h)
     local menuSize = 0 -- The total amount of options in this menu
     for _ in pairs(menuItems) do menuSize = menuSize + 1 end
 
+    if (menuSize == 0) then
+        error("A menu must have selectable options")
+    end
+
     while true do
         local oldX, oldY = term.getCursorPos()
         -- Draw the menu
