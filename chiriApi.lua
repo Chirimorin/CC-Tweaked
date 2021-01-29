@@ -141,20 +141,25 @@ local function install(programName)
     end
 end
 
-setCompletionFunction("chiriApi", function(shell, index, argument, previous)
-    if (index == 1) then
+local function completionFunction(shell, parNumber, curText, lastText)
+    if (parNumber == 2) then
         local completionOptions = { "update", "install" }
+        local results = {}
 
-        local tResults = {}
-        for n=1,#completionOptions do
-            local sOption = completionOptions[n]
-            if #sOption > #argument and string.sub( sOption, 1, #argument ) == sText then
-                local sResult = string.sub( sOption, #argument + 1 )
-                table.insert( tResults, sResult )
+        for i=1,#completionOptions do
+            local option = completionOptions[i]
+            if #option > #curText and string.sub( option, 1, #curText ) == curText then
+                local result = string.sub( option, #curText + 1 )
+                table.insert( results, result )
             end
         end
-        return tResults
+
+        return results
     end
+end
+
+shell.setCompletionFunction("chiriApi", function(shell, index, argument, previous)
+
 end)
 
 args = {...}
