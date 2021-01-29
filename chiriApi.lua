@@ -32,8 +32,6 @@ local function downloadFile(filePath)
     local file = fs.open(filePath, "w")
     file.write(fileData)
     file.close()
-
-    --shell.run("wget " .. fileInfo.download_url .. " " .. filePath)
 end
 
 local function requireApi(apiName)
@@ -48,6 +46,17 @@ end
 -------------------------
 --  PROGRAM FUNCTIONS  --
 -------------------------
+local function downloadFileWithMessages(filePath)
+    local w, h = term.getSize()
+    local errorMessage = downloadFile(filePath)
+    if (errorMessage == nil) then
+        print(textApi.centeredText("Successfully downloaded " .. filePath, w))
+    else
+        print(textApi.centeredText("Could not download " .. filePath, w))
+        print(textApi.centeredText(errorMessage, w))
+    end
+end
+
 local function update()
     local textApi = requireApi("textApi")
 
@@ -56,13 +65,13 @@ local function update()
     term.setCursorPos(1,1)
 
     print(textApi.centeredText("--  Updating chiriApi  --", w))
-    downloadFile("chiriApi.lua")
+    downloadFileWithMessages("chiriApi.lua")
 
     print(textApi.centeredText("--  Updating API files  --", w))
     if (fs.exists(apiFolder)) then
         local files = fs.list(apiFolder)
         for k, v in pairs(files) do
-            downloadFile(apiFolder .. "/" .. v)
+            downloadFileWithMessages(apiFolder .. "/" .. v)
         end
     end
 
@@ -70,7 +79,7 @@ local function update()
     local files = fs.list("")
     for k, v in pairs(files) do
         if (string.sub(v, -4) == ".lua" and v ~= "chiriApi.lua") then
-            downloadFile(v)
+            downloadFileWithMessages(v)
         end
     end
 
@@ -126,7 +135,7 @@ local function install(programName)
     end
 
     print(textApi.centeredText("Downloading program \"" .. programName .. "\"", w))
-    downloadFile(programName)
+    downloadFileWithMessages(programName)
 end
 
 args = {...}
