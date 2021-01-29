@@ -38,13 +38,18 @@ end
 local function downloadFileWithMessages(filePath)
     local textApi = requireApi("textApi")
     local w, h = term.getSize()
+    local textColor = term.getTextColor()
+
     local errorMessage = downloadFile(filePath)
     if (errorMessage == nil) then
-        print(textApi.centeredText("Successfully downloaded " .. filePath, w))
+        term.setTextColor(colors.green)
+        print(textApi.centeredText(filePath, w))
     else
-        print(textApi.centeredText("Could not download " .. filePath, w))
-        print(textApi.centeredText(errorMessage, w))
+        term.setTextColor(colors.red)
+        print(textApi.centeredText(filePath .. ": " .. errorMessage, w))
     end
+
+    term.setTextColor(textColor)
 end
 
 local function update()
